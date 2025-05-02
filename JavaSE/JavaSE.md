@@ -1,18 +1,4 @@
-# 一、Java基础
-
-## Hello world
-
-```java
-public class hello{
-    public static void main(String[] args){
-		System.out.print("Hello,World")
-    }
-}
-```
-
-javac编译
-
-java执行class文件
+# 一、Java基础语法
 
 ## 基本数据
 
@@ -116,22 +102,6 @@ public class demo{
 }
 ```
 
-## 方法
-
-```java
-public class Demo01 {
-    public static void main(String[] args) {
-        int i=add(1,2);
-        System.out.println(i);
-    }
-    //加上static后就是类方法，其他方法可以直接引用
-    public static int add(int a,int b){
-        return a+b;
-    }
-}
-
-```
-
 ## 命令行传参
 
 运行一个程序时候再给它传递消息。依靠cmd实现
@@ -141,95 +111,6 @@ public class Demo01 {
 ## 内存分析
 
 ![image-20240428103617308](C:\Users\zsy\AppData\Roaming\Typora\typora-user-images\image-20240428103617308.png)
-
-## 继承
-
-```java
-public class Student extends Person{
-    
-}//Student继承了Person类
-//Ctrl+H可以打开继承树
-//所有类都继承object类
-//Java取消了多重继承
-```
-
-```java
-public Student(){
-    //隐藏代码：调用父类的无参构造
-    System.out.println('1')
-}
-public Person(){
-    System.out.println('2')
-}
-```
-
-## 多态
-
-方法的多态，不同的对象调用同一方法，会有不同的效果
-
-Alt+insert: override 在子类中选择父类方法进行重写覆盖
-
-Alt+enter 快速新建对象
-
-**父类的引用可以指向子类的实例**
-
-==对象能执行哪些方法看引用类型==（**左边**）
-
-### 静态方法
-
-```java
-public class B{
-    public static void test(){
-        System.out.println("B==>test()")
-    }
-}
-
-public class A extends B{
-    public static void test(){
-        System.out.println("A==>test()")
-    }
-}
-
-public class demo{
-    public static void main(){
-        A a=new A();
-        B b=new A();
-        a.test();
-        b.test();
-    }
-}
-//调用静态函数时，实际方法取决于引用类型
-//A==>test()
-//B==>test()
-```
-
-### 非静态方法
-
-```java
-public class B{
-    public void test(){
-        System.out.println("B==>test()")
-    }
-}
-
-public class A extends B{
-    public void test(){
-        System.out.println("A==>test()")
-    }
-}
-
-public class demo{
-    public static void main(){
-        A a=new A();
-        B b=new A();
-        a.test();
-        b.test();
-    }
-}
-//如果子类没有重写该方法，会自动调用父类方法
-//A==>test()
-//A==>test()
-```
 
 
 
@@ -333,7 +214,144 @@ public class UserServiceImpl implements UserService{
 
 接口不包含实例变量，但可以有static final常量(==并不常用==)
 
-# 二、JavaIO
+# 二、 面向对象
+
+## 类
+
+## 方法
+
+`System.out.println()`
+
+`System`是系统类
+
+`out`是一个对象
+
+`println()`是`out`中的一个方法
+
+### 类方法
+
+```java
+public class Demo01 {
+    public static void main(String[] args) {
+        int i=add(1,2);
+        System.out.println(i);
+    }
+    //加上static后就是类方法，其他方法可以直接引用
+    public static int add(int a,int b){
+        return a+b;
+    }
+}
+```
+
+| **特性**          | **静态方法 (`static`)**      | **非静态方法 (实例方法)**  |
+| :---------------- | :--------------------------- | :------------------------- |
+| **归属对象**      | 属于类本身                   | 属于类的实例（对象）       |
+| **调用方式**      | `类名.方法名()`              | `对象名.方法名()`          |
+| **内存时机**      | 类加载时分配内存             | 对象实例化时分配内存       |
+| **访问成员变量**  | 只能直接访问静态成员         | 可访问静态和非静态成员     |
+| **`this` 关键字** | 不能使用（无当前对象上下文） | 可以使用（指向当前对象）   |
+| **多态性**        | 不支持重写（编译时绑定）     | 支持重写（运行时动态绑定） |
+
+### 构造方法
+
+构造方法用于创建类的**实例**
+
+
+
+## 重载
+
+## 继承
+
+```java
+public class Student extends Person{
+    
+}//Student继承了Person类
+//Ctrl+H可以打开继承树
+//所有类都继承object类
+//Java取消了多重继承
+```
+
+```java
+public Student(){
+    //隐藏代码：调用父类的无参构造
+    System.out.println('1')
+}
+public Person(){
+    System.out.println('2')
+}
+```
+
+## 多态
+
+方法的多态，不同的对象调用同一方法，会有不同的效果
+
+Alt+insert: override 在子类中选择父类方法进行重写覆盖
+
+Alt+enter 快速新建对象
+
+**父类的引用可以指向子类的实例**
+
+==对象能执行哪些方法看引用类型==（**左边**）
+
+### 静态方法
+
+```java
+public class B{
+    public static void test(){
+        System.out.println("B==>test()")
+    }
+}
+
+public class A extends B{
+    public static void test(){
+        System.out.println("A==>test()")
+    }
+}
+
+public class demo{
+    public static void main(){
+        A a=new A();
+        B b=new A();
+        a.test();
+        b.test();
+    }
+}
+//调用静态函数时，实际方法取决于引用类型
+//A==>test()
+//B==>test()
+```
+
+### 非静态方法
+
+```java
+public class B{
+    public void test(){
+        System.out.println("B==>test()")
+    }
+}
+
+public class A extends B{
+    public void test(){
+        System.out.println("A==>test()")
+    }
+}
+
+public class demo{
+    public static void main(){
+        A a=new A();
+        B b=new A();
+        a.test();
+        b.test();
+    }
+}
+//如果子类没有重写该方法，会自动调用父类方法
+//A==>test()
+//A==>test()
+```
+
+
+
+# 三、JavaIO
 
 **流**：内存与存储设备之间传输数据的通道，双向
 
