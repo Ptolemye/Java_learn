@@ -142,26 +142,6 @@ public class Person{
 */
 ```
 
-## 包机制
-
-`package`机制的引入解决了类名冲突的问题（不同的文件夹中可能存在相同名字的类）
-
-**一个类总是只属于某个包**，完整类名是`包名.类名`
-
-JVM只看完整类名
-
-### 静态导入包
-
-```java
-import static java.lang.Math.random;
-public class Test{
-    public static void main(String[] args){
-        System.out.println(random());
-        //达到简略的目的，不用写math.random()
-    }
-}
-```
-
 ## classpath和jar
 
 ### classpath
@@ -218,6 +198,18 @@ public class UserServiceImpl implements UserService{
 
 ## 类
 
+类是所有实例的==蓝图==
+
+Java类由==变量==和==方法==组成
+
+Java类可以包含以下类型的变量
+
+| 变量类型 | 特点                                                 |
+| -------- | ---------------------------------------------------- |
+| 局部变量 | 在方法中定义的变量                                   |
+| 成员变量 | 定义在类中，创建对象时实例化                         |
+| 类变量   | 特殊的成员变量，加载类时被实例化，使用static进行修饰 |
+
 ## 方法
 
 `System.out.println()`
@@ -256,11 +248,83 @@ public class Demo01 {
 
 构造方法用于创建类的**实例**
 
+类中如果没有定义任何构造方法，Java也会提供默认的**无参构造函数**
+
+如果自己设计了构造方法，默认的无参构造方法便失效了。
+
+```java
+public class Person {
+    String name;
+    int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+
+## 重载与重写
+
+| 区别点   | 重载方法 | 重写方法                                       |
+| :------- | :------- | :--------------------------------------------- |
+| 参数列表 | 必须修改 | 一定不能修改                                   |
+| 返回类型 | 可以修改 | 一定不能修改                                   |
+| 异常     | 可以修改 | 可以减少或删除，一定不能抛出新的或者更广的异常 |
+| 访问     | 可以修改 | 一定不能做更严格的限制（可以降低限制）         |
+
+**重载（overload）**作用于同一个类或者一个子类之中
+
+一个类里，方法名字**相同**，但参数列表不同，返回值也可能不同
+
+重载要求==必须改变原本方法的参数列表==
+
+```java
+public class Demo {
+    public static void main(String[] args) {
+        func(2);
+        func(2.1F);
+    }
+    public static void func(int a){
+        System.out.println("这是一个整型");
+    }
+
+    public static void func(float a){
+        System.out.println("这是一个浮点型");
+    }
+}
+```
+
+**重写（override）**作用于子类和父类之间
+
+子类定义一个与父类具有相同名称，参数列表，返回类型的方法，但具体实现形式不同，**即外壳不变，核心重写！**
+
+```java
+class A{
+    public void test(){
+        System.out.println("A的非静态方法")
+    }
+}
+
+public class B extends A{
+    public void test(){
+        System.out.println("B的非静态方法")
+    }
+}
+```
 
 
-## 重载
 
 ## 继承
+
+子类可以通过继承来得到父类的变量和方法
+
+```java
+class 父类{
+}
+class 子类 extends 父类{
+}
+```
 
 ```java
 public class Student extends Person{
@@ -271,19 +335,46 @@ public class Student extends Person{
 //Java取消了多重继承
 ```
 
+子类不继承构造方法，但子类的构造方法**需要**对父类的构造方法进行（显式或隐式）地调用
+
+- 父类的构造方法没有参数列表，子类构造方法会自动调用父类方法
+- 父类的构造方法有参数列表，子类需要使用`super`关键字调用构造器
+
 ```java
-public Student(){
-    //隐藏代码：调用父类的无参构造
-    System.out.println('1')
+public class Demo {
+    public static void main(String[] args) {
+        B b = new B();
+    }
 }
-public Person(){
-    System.out.println('2')
+class A{
+    A(){
+        System.out.println('a');
+    }
+}
+class B extends A{
+    B(){
+        System.out.println('b');
+    }
 }
 ```
+
+**继承的特性**
+
+- 子类继承父类的非private属性和方法
+- 子类可以自己定义属性
+- 子类可以用自己的方式实现父类的方法（override）
 
 ## 多态
 
 方法的多态，不同的对象调用同一方法，会有不同的效果
+
+多态基于以下三个条件而存在：
+
+（1）继承
+
+（2）重写
+
+（3）父类引用指向子类对象
 
 Alt+insert: override 在子类中选择父类方法进行重写覆盖
 
@@ -293,65 +384,244 @@ Alt+enter 快速新建对象
 
 ==对象能执行哪些方法看引用类型==（**左边**）
 
+调用静态方法时，实际方法取决于==引用类型==
+调用非静态方法时，实际方法取决于==实例类型==
+
 ### 静态方法
 
 ```java
-public class B{
-    public static void test(){
-        System.out.println("B==>test()")
+class A{
+    public static void staticTest(){
+        System.out.println("A的静态方法");
     }
 }
 
-public class A extends B{
-    public static void test(){
-        System.out.println("A==>test()")
+class B extends A{
+    public static void staticTest(){
+        System.out.println("B的静态方法");
     }
 }
 
-public class demo{
-    public static void main(){
-        A a=new A();
-        B b=new A();
-        a.test();
-        b.test();
+public class Demo{
+    public static void main(String[] args) {
+            A a=new A();
+            A b=new B();
+            a.staticTest();
+            b.staticTest();
     }
 }
-//调用静态函数时，实际方法取决于引用类型
-//A==>test()
-//B==>test()
+
+/*
+A的静态方法
+A的静态方法
+ */    
 ```
 
 ### 非静态方法
 
 ```java
-public class B{
+class A{
     public void test(){
-        System.out.println("B==>test()")
+        System.out.println("A的非静态方法")
     }
 }
 
-public class A extends B{
+public class B extends A{
     public void test(){
-        System.out.println("A==>test()")
+        System.out.println("B的非静态方法")
     }
 }
 
 public class demo{
     public static void main(){
         A a=new A();
-        B b=new A();
+        A b=new B();
         a.test();
         b.test();
     }
 }
 //如果子类没有重写该方法，会自动调用父类方法
-//A==>test()
-//A==>test()
+//A的非静态方法
+//B的非静态方法
+```
+
+## 抽象类
+
+抽象类是特殊的类，不能被用于实例化对象
+
+抽象类必须被**继承**才能使用
+
+抽象类用`abstract`进行修饰
+
+抽象类特点：
+
+（1）不能实例化
+
+（2）可以包含抽象方法
+
+（3）可以包含具体方法
+
+（4）可以包含构造方法
+
+```java
+abstract class Animal {
+    private String name;
+    public Animal(String name) {
+        this.name = name;
+    }
+    // 具体方法
+    public void eat() {
+        System.out.println(name + " is eating.");
+    }
+    // 抽象方法
+    public abstract void makeSound();
+}
+```
+
+继承抽象类的子类一定要实现抽象方法
+
+```java
+// 具体子类
+class Dog extends Animal {
+    public Dog(String name) {
+        super(name);
+    }
+    
+    @Override
+    public void makeSound() {
+        System.out.println("Woof woof!");
+    }
+}
+```
+
+## 封装
+
+为了防止类内部的数据和代码被随意更改，提供接口作为访问媒介
+
+```java
+public class Person{
+    private String name;
+    private int age;
+	//访问接口
+    public int getAge(){
+      return age;
+    }
+    public String getName(){
+      return name;
+    }
+    //赋值接口
+    public void setAge(int age){
+      this.age = age;
+    }
+    public void setName(String name){
+      this.name = name;
+    }
+}
+```
+
+## 接口
+
+**类**：包含属性和方法
+
+**接口**：抽象方法的集合
+
+`interface`可以被用于申明接口
+
+接口只能包含final和static变量
+
+```java
+[可见度] interface 接口名称 [extends 其他的接口名] {
+        // 声明变量
+        // 抽象方法
+}
+```
+
+类(抽象类)使用`implements`关键字实现接口
+
+```java
+class ... implements 接口名称[, 其他接口名称, 其他接口名称..., ...] ...
+```
+
+接口可以继承接口
+
+```java
+// 文件名: Sports.java
+public interface Sports
+{
+   public void setHomeTeam(String name);
+   public void setVisitingTeam(String name);
+}
+ 
+// 文件名: Football.java
+public interface Football extends Sports
+{
+   public void homeTeamScored(int points);
+   public void visitingTeamScored(int points);
+   public void endOfQuarter(int quarter);
+}
+```
+
+## 包机制
+
+`package`机制的引入解决了类名冲突的问题（不同的文件夹中可能存在相同名字的类）
+
+**一个类总是只属于某个包**，完整类名是`包名.类名`
+
+JVM只看完整类名
+
+### 静态导入包
+
+```java
+import static java.lang.Math.random;
+public class Test{
+    public static void main(String[] args){
+        System.out.println(random());
+        //达到简略的目的，不用写math.random()
+    }
+}
 ```
 
 
 
-# 三、JavaIO
+# 三、Java基础类（java.lang)
+
+## 字符串
+
+### String
+
+### StringBuilder
+
+# 四、Java工具类（java.util）
+
+## Collection
+
+`stream`
+
+## 集合
+
+### Hashset
+
+`add`
+
+`remove`
+
+`contains`
+
+## 列表
+
+### ArrayList
+
+### LinkedList
+
+## 字典
+
+### HashMap
+
+实现了基于键值对的数据存储方式
+
+使用“键(key)”
+
+# 四、JavaIO(java.io)
 
 **流**：内存与存储设备之间传输数据的通道，双向
 
