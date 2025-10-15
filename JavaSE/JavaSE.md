@@ -591,6 +591,10 @@ public class Test{
 
 ### StringBuilder
 
+`append`
+
+`insert`
+
 # 四、Java工具类（java.util）
 
 ## Collection
