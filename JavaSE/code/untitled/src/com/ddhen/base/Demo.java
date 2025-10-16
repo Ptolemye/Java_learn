@@ -4,8 +4,12 @@ import java.util.Scanner;
 
 public class Demo {
     public static void main(String[] args) {
-        int a =  2;
-        int b = 3;
-        System.out.println(a < b ? a : b);
+        int[] a = {1,2,3};
+        String[] b = {"aaa","bbb"};
+        System.out.println(Demo.a());
+        System.out.println(b);
+    }
+    public static int a(){
+        return 1;
     }
 }
