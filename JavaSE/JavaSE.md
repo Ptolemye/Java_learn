@@ -1,3 +1,29 @@
+# 〇、
+
+## JDK
+
+JDK(Java Development kit)：Java开发工具包
+
+![image-20251015155623151](./image/image-20251015155623151.png)
+
+## JRE
+
+JRE(Java Runtime Environment)：Java运行环境
+
+## IDEA
+
+**项目结构**
+
+project
+
+​	module
+
+​		package
+
+​			class
+
+
+
 # 一、Java基础语法
 
 ## 基本数据
@@ -19,6 +45,13 @@ int i4=10_0000_0000
 
 强制转换 高->低
 
+```java
+int a = 77;
+byte b = (byte)a;
+```
+
+
+
 自动转换 低->高
 
 ## 变量、常量
@@ -35,8 +68,6 @@ public class demo{
 ```
 
 ## Javadoc
-
-![image-20240423231511054](C:\Users\zsy\AppData\Roaming\Typora\typora-user-images\image-20240423231511054.png)
 
 ```java
 package com.ddhen.base;
@@ -61,6 +92,19 @@ public class Doc {
 }
 
 ```
+
+## 三元运算符
+
+```java
+public static void main(String[] args) {
+        int a =  2;
+        int b = 3;
+        System.out.println(a < b ? a : b);
+    }
+// 2
+```
+
+
 
 ## Switch
 
@@ -607,9 +651,15 @@ public class Test{
 
 `add`
 
+添加元素
+
 `remove`
 
+移除元素
+
 `contains`
+
+是否包含元素
 
 ## 列表
 
