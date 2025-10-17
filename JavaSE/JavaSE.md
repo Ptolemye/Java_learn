@@ -717,21 +717,18 @@ String是一个常量，他无法被改变！！！
 
 ## Collection(集合)
 
-`stream`
+## List
 
-
-
-### Hashset
-
-| 方法 | 描述 |
-| ---- | ---- |
-|      |      |
-
-
-
-
+| 方法                        | 描述              |
+| --------------------------- | ----------------- |
+| boolean add(E  e)           | 添加元素          |
+| int size()                  | 列表长度          |
+| E get(int index)            | 获取index位置元素 |
+| E set(int index, E element) | 修改index位置元素 |
 
 ### ArrayList
+
+
 
 ### LinkedList
 
