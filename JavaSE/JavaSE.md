@@ -663,6 +663,8 @@ public class Test{
 
 ### String
 
+String是一个常量，他无法被改变！！！
+
 **1、构造方法**
 
 ==直接赋值==
@@ -690,13 +692,27 @@ public class Test{
 
 **3、常用api**
 
+| 方法                                           | 描述                                             |
+| ---------------------------------------------- | ------------------------------------------------ |
+| char charAt(int index)                         | 返回指定索引处的char值                           |
+| String concat(String str)                      | 将str连接到此字符串的末尾                        |
+| char[] toCharArray()                           | 将此字符串转换为字符数组                         |
+| String substring(int beginIndex, int endIndex) | 返回一个子字符串                                 |
+| String replace(char a,char b)                  | 将字符串中的a全部换成b，返回一个新字符串，有重载 |
+
 
 
 ### StringBuilder
 
-`append`
+1、常用api
 
-`insert`
+| 方法                    | 描述 |
+| ----------------------- | ---- |
+| StringBuilder append()  |      |
+| StringBuilder reverse() |      |
+|                         |      |
+
+
 
 # 四、Java工具类（java.util）
 
