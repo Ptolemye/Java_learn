@@ -706,43 +706,36 @@ String是一个常量，他无法被改变！！！
 
 1、常用api
 
-| 方法                    | 描述 |
-| ----------------------- | ---- |
-| StringBuilder append()  |      |
-| StringBuilder reverse() |      |
-|                         |      |
+| 方法                           | 描述             |
+| ------------------------------ | ---------------- |
+| StringBuilder append(任意类型) | 添加任意类型数据 |
+| StringBuilder reverse()        | 反转sb中的内容   |
 
 
 
 # 四、Java工具类（java.util）
 
-## Collection
+## Collection(集合)
 
 `stream`
 
-## 集合
+
 
 ### Hashset
 
-`add`
+| 方法 | 描述 |
+| ---- | ---- |
+|      |      |
 
-添加元素
 
-`remove`
 
-移除元素
 
-`contains`
-
-是否包含元素
-
-## 列表
 
 ### ArrayList
 
 ### LinkedList
 
-## 字典
+
 
 ### HashMap
 
