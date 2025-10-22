@@ -672,6 +672,14 @@ public class Test{
 }
 ```
 
+## final关键字
+
+| 成分         | 说明                   |
+| ------------ | ---------------------- |
+| final class  | 最终类，不能继承       |
+| final func() | 最终方法，不能重写     |
+| final value  | 常量，只能初始化时赋值 |
+
 
 
 # 三、Java基础类（java.lang)
