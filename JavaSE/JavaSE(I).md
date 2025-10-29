@@ -727,6 +727,13 @@ String是一个常量，他无法被改变！！！
 
 ### Random
 
+### Collections
+
+| 方法                                                         | 描述                 |
+| ------------------------------------------------------------ | -------------------- |
+| public static <T> boolean addAll(Collection<T> c, T...elements) | 批量添加元素         |
+| public static void shuffle(List<> list)                      | 打乱List集合元素顺序 |
+
 
 
 # 五、集合框架

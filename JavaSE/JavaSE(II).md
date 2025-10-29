@@ -1,4 +1,41 @@
-# 六、JavaIO(java.io)
+# 一、Stream
+
+**Stream流的使用步骤：**
+
+- 先得到一条Stream流，把数据放上去
+- 使用==中间方法==对Stream上的数据进行操作
+- 使用==终结方法==对Stream上的数据进行操作
+
+| 获取方式     | 方法名                                        | 说明                     |
+| ------------ | --------------------------------------------- | ------------------------ |
+| 单列集合     | default Stream\<E> stream()                   | Collection中的默认方法   |
+| 双列集合     | 无                                            | 只能先提取set            |
+| 数组         | public static\<T> Stream<T> stream(T[] array) | Arrays工具类中的静态方法 |
+| 一堆零散数据 | public static\<T> Stream<T> of(T...values)    | Stream接口中的静态方法   |
+
+## 获取Stream
+
+```java
+'''
+    单列集合
+'''
+list.stream().forEach(s->System.out.println(s));
+    
+'''
+    双列集合
+'''
+map.keySet().stream().forEach(s->System.out.println(s));
+map.entrySet().stream().forEach(s->System.out.println(s));
+
+'''
+    数组类型
+'''
+Arrays.stream(arr).forEach(s->System.out.println(s));
+```
+
+
+
+# 二、JavaIO(java.io)
 
 **流**：内存与存储设备之间传输数据的通道，双向
 
