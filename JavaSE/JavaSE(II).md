@@ -31,7 +31,23 @@ map.entrySet().stream().forEach(s->System.out.println(s));
     数组类型
 '''
 Arrays.stream(arr).forEach(s->System.out.println(s));
+
+'''
+    一堆零散数据
+'''
+Stream.of(...).forEach()
 ```
+
+## 中间方法
+
+| 名称                                     | 说明               |
+| ---------------------------------------- | ------------------ |
+| Stream<T> filter(Predicate<T> predicate) | 过滤               |
+| Stream<T>map(Function<T,R> mapper)       | 转换流中的数据类型 |
+
+# 二、方法引用
+
+把已经实现的方法逻辑直接复用，当作函数式接口中抽象方法的方法体
 
 
 
@@ -346,7 +362,7 @@ FileReader和FileWriter复制文本文件，不能复制图片或二进制文件
 
 ## 转换流
 
-# 七、多线程
+# 三、多线程
 
 ## 基础概念
 
