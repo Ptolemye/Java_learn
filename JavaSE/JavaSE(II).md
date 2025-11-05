@@ -49,7 +49,46 @@ Stream.of(...).forEach()
 
 把已经实现的方法逻辑直接复用，当作函数式接口中抽象方法的方法体
 
+- 引用处应该是函数式接口
 
+- 被引用方法需要已存在(自己写或者第三方工具类)
+- 被引用方法功能需要满足当前要求
+
+```java
+Arrays.sort(arr,FunctionDemo1::subtraction)
+//::是方法引用标志
+```
+
+## 引用静态方法
+
+``` java
+ArrayList<String> list = new ArrayList<>();
+Collections.addAll(list,"1","2","3")
+
+//Lambda写法
+list.stream().map(s->Integer.parseInt(s));
+//方法引用写法
+list.stream().map(Integer::pareInt)；
+```
+
+## 引用类的成员方法
+
+- 对象::成员方法（成员方法属于对象实例）
+- this::成员方法
+- super::成员方法
+
+```java
+//其他类成员方法
+list.stream().filter(new StringOperation()::judge)
+```
+
+## 引用构造方法
+
+格式： 类名::new
+
+# 三、异常
+
+# 四、File
 
 # 二、JavaIO(java.io)
 
