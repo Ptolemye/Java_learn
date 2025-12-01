@@ -90,7 +90,9 @@ list.stream().filter(new StringOperation()::judge)
 
 # 四、File
 
-# 二、JavaIO(java.io)
+
+
+# 五、JavaIO(java.io)
 
 **流**：内存与存储设备之间传输数据的通道，双向
 
@@ -401,7 +403,7 @@ FileReader和FileWriter复制文本文件，不能复制图片或二进制文件
 
 ## 转换流
 
-# 三、多线程
+# 六、多线程
 
 ## 基础概念
 
@@ -474,43 +476,19 @@ public class TestThread2 implements Runnable{
 }
 ```
 
-### 并发问题
-
-当多个线程同时调用同一个资源时，可能造成冲突，产生不一致性
-
-### 龟兔赛跑(练习)
-
-```java
-//龟兔赛跑
-public class Race implements Runnable{
-    @Override
-    public void run() {
-        if(Thread.currentThread().getName().equals("兔子")) {
-            for (int i = 0; i < 100; i+=10) {
-                System.out.println("兔子跑了" + i + "米");
-                try {
-                    Thread.sleep(1);
-                }catch(InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        }else{
-            for (int i = 0; i < 100; i++) {
-                System.out.println("乌龟跑了" + i + "米");
-            }
-        }
-        System.out.println(Thread.currentThread().getName()+"到达终点");
-    }
-
-    public static void main(String[] args) {
-        Race race=new Race();
-        new Thread(race,"兔子").start();
-        new Thread(race,"乌龟").start();
-    }
-}
-```
-
 ### 实现Callable接口
+
+## 常用成员方法
+
+**Thread**成员方法
+
+| 方法名称                  | 描述             |
+| ------------------------- | ---------------- |
+| String getName()          | 返回此线程的名字 |
+| void setName(String name) | 设置线程名字     |
+|                           |                  |
+
+
 
 ## Lamda表达式
 
