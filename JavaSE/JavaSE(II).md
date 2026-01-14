@@ -112,7 +112,7 @@ list.stream().filter(new StringOperation()::judge)
 
 输出：OutputStream
 
-### FileInputStream
+**FileInputStream**
 
 **1、逐步读取每个字符**
 
@@ -165,7 +165,7 @@ x
 */
 ```
 
-### FileOutputStream
+**FileOutputStream**
 
 输出流对象创建时，构造函数需要传入两个参数
 
@@ -189,27 +189,7 @@ public class Demo1 {
 }
 ```
 
-### 练习：复制图片
 
-```java
-public class Demo1 {
-    public static void main(String[] args) throws Exception{
-        //1、创建输入流对象
-        FileInputStream fis=new FileInputStream("src/com/ddhen/method/Demo2/text/软考证书.pdf");
-        //2、创建输出流对象
-        FileOutputStream fos=new FileOutputStream("src/com/ddhen/method/Demo2/text/软考证书(副本).pdf");
-        //3、创建缓存
-        byte[] buffer=new byte[1024];
-        int count=0;
-        while((count=fis.read(buffer))!=-1){
-            fos.write(buffer);
-        }
-        //4关闭
-        fis.close();
-        fos.close();
-    }
-}
-```
 
 ## 字节缓冲流
 
@@ -219,8 +199,6 @@ public class Demo1 {
 
 - 提高IO效率，减少访问磁盘的次数
 - 数据存储在缓冲区中，调用flush将缓冲区内容写入文件中，也可以直接close
-
-### BufferdInputStream
 
 此时的`read()`操作先将8k字节读入缓冲区，之后如果缓冲区未被读完，则不会与磁盘进行交互
 
@@ -245,8 +223,6 @@ public class Demo1 {
     }
 }
 ```
-
-### BufferdOutputStream
 
 注意，此时的`write`只是将字节写入8kb的缓存区，注意flush调用刷新到磁盘
 
@@ -280,8 +256,6 @@ public class Demo1 {
 
 **反序列化**：序列化的逆过程，即将序列化后的数据重新还原成原始的数据结构或对象
 
-### ObjectOutputStream
-
 所有需要序列化的类都必须`implements`接口`Serializable`
 
 ```java
@@ -303,8 +277,6 @@ public class Demo1 {
 }
 ```
 
-### ObjectInputStream
-
 `readObject()`的返回值为`Objetct`类型，需要强制转换
 
 ```java
@@ -322,12 +294,6 @@ public class Demo1 {
 }
 ```
 
-### 序列化与反序列化注意事项
-
-- 序列化类必须实现Serializable接口
-- 序列化类中的对象属性要求实现Serializable接口
-- 序列化版本号ID`long`,保证序列化的类和反序列化的类是同一个类
-
 ## 字符流
 
 `ISO-8859-1`:收录ASCII外，还包括西欧、泰语等
@@ -343,8 +309,6 @@ public class Demo1 {
 输入：Reader
 
 输出：Writer
-
-### FileReader
 
 用来读取字符文件的便捷类，此类构造方法假定默认字符编码和默认字节缓冲区大小都是适当的
 
@@ -365,8 +329,6 @@ public class Demo1 {
 //四
 //川大学周苏洋    
 ```
-
-### FileWriter
 
 文档复制练习
 
@@ -395,13 +357,7 @@ FileReader和FileWriter复制文本文件，不能复制图片或二进制文件
 
 复制图片或者pdf类型的文件只能使用字节流
 
-## 字符缓冲流
 
-### BufferdReader
-
-### BufferdWriter
-
-## 转换流
 
 # 六、多线程
 
@@ -490,43 +446,7 @@ public class TestThread2 implements Runnable{
 
 
 
-## Lamda表达式
 
-### **函数式接口**
-
-只包含唯一一个抽象方法，即为函数式接口
-
-通过lambda表达式来创建该接口对象
-
-```java
-public interface Runnable{
-    public abstract void run()
-}
-```
-
-### 一个案例
-
-```java
-public class LamdaTest {
-    static void send(message ms){
-        String status=ms.sendmessage("顺丰","周苏洋");
-        System.out.println(status);
-    }
-
-    public static void main(String[] args) {
-        //()->{},()中填写唯一抽象方法的参数，{}中填写具体的函数实现方法
-        //()->
-        send(((type, name) -> {
-            System.out.println(type+"寄快递"+name);
-            return "success";
-        }));
-    }
-}
-
-interface message{
-    abstract String sendmessage(String type,String name);
-}
-```
 
 ## 静态代理
 
@@ -573,6 +493,6 @@ public class StopTest implements Runnable{
 }
 ```
 
-### 线程休眠
+# 七、网络编程
 
-- sleep
+# 八、反射
