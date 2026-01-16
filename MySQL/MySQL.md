@@ -22,6 +22,8 @@
 
 # DDL
 
+数据定义语言，用来定义数据库对象（数据库，表，字段）
+
 ## 数据库操作
 
 1) 查询所有数据库
@@ -88,7 +90,7 @@ drop database [ if exists ] 数据库名 ;
 
 ## 表操作
 
-1. 查询创建
+### 查询创建
 
 （1）**查询当前数据库所有表**
 
@@ -121,9 +123,183 @@ mysql> show tables;
 
 查看到指定表的字段，字段的类型、是否可以为NULL，是否存在默认值等信息。
 
+`desc`实际上就是describe
+
 ```sql
 desc 表名 ;
 ```
 
+```
+mysql> desc users;
++------------+------------------------+------+-----+-------------------+-------------------+
+| Field      | Type                   | Null | Key | Default           | Extra             |
++------------+------------------------+------+-----+-------------------+-------------------+
+| id         | int                    | NO   | PRI | NULL              | auto_increment    |
+| username   | varchar(50)            | NO   |     | NULL              |                   |
+| email      | varchar(100)           | YES  | UNI | NULL              |                   |
+| age        | tinyint unsigned       | YES  |     | 18                |                   |
+| gender     | enum('男','女','未知') | YES  |     | 未知              |                   |
+| created_at | timestamp              | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------+------------------------+------+-----+-------------------+-------------------+
+```
+
+（3）**查询指定表的建表语句**
+
+通过这条指令，主要是用来查看建表语句的
+
+```sql
+show create table 表名 ;
+```
+
+```
+ users | CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
+  `email` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '电子邮箱',
+  `age` tinyint unsigned DEFAULT '18' COMMENT '年龄',
+  `gender` enum('男','女','未知') COLLATE utf8mb4_general_ci DEFAULT '未知' COMMENT '性别',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+```
+
+（4）**创建表结构**
+
+```sql
+CREATE TABLE 表名(
+字段1 字段1类型 [ COMMENT 字段1注释 ],
+字段2 字段2类型 [COMMENT 字段2注释 ],
+字段3 字段3类型 [COMMENT 字段3注释 ],
+......
+字段n 字段n类型 [COMMENT 字段n注释 ]
+) [ COMMENT 表注释 ] ;
+```
 
 
+
+### 修改
+
+（1）**添加字段**
+
+```sql
+ALTER TABLE 表名 ADD 字段名 类型 (长度) [ COMMENT 注释 ] [ 约束 ];
+```
+
+例
+
+```sql
+ALTER TABLE emp ADD nickname varchar(20) COMMENT '昵称';
+```
+
+（2）**修改数据类型**
+
+```sql
+ALTER TABLE 表名 MODIFY 字段名 新数据类型 (长度);
+```
+
+（3） **修改字段名和字段类型**
+
+```sql
+ALTER TABLE 表名 CHANGE 旧字段名 新字段名 类型 (长度) [ COMMENT 注释 ] [ 约束 ];
+```
+
+（4）**删除字段**
+
+```sql
+ALTER TABLE 表名 DROP 字段名;
+```
+
+（5）**修改表名**
+
+```sql
+ALTER TABLE 表名 RENAME TO 新表名;
+```
+
+
+
+### 删除
+
+（1）**删除表**
+
+```sql
+DROP TABLE [ IF EXISTS ] 表名;
+```
+
+（2）**删除指定表, 并重新创建表**
+
+```sql
+TRUNCATE TABLE 表名;
+```
+
+
+
+# DML
+
+Data Manipulation Language（数据操作语言），用来对数据库中表的数据记录进行增、删、改操作
+
+- 添加数据（INSERT）
+- 修改数据（UPDATE）
+- 删除数据（DELETE）
+
+## 添加数据
+
+（1）**给指定字段添加数据**
+
+```sql
+INSERT INTO 表名 (字段名1, 字段名2, ...) VALUES (值1, 值2, ...);
+```
+
+（2）**给全部字段添加数据**
+
+```sql
+INSERT INTO 表名 VALUES (值1, 值2, ...);
+```
+
+（3） **批量添加数据**
+
+```sql
+INSERT INTO 表名 (字段名1, 字段名2, ...) VALUES (值1, 值2, ...), (值1, 值2, ...), (值
+1, 值2, ...) ;
+```
+
+## 修改数据
+
+```sql
+UPDATE 表名 SET 字段名1 = 值1 , 字段名2 = 值2 , .... [ WHERE 条件 ] ;
+```
+
+## 删除数据
+
+```sql
+DELETE FROM 表名 WHERE 条件;
+```
+
+`DELETE` 会根据 `WHERE` 条件扫描数据，然后将符合条件的记录逐行删除。
+
+可以不写条件但会==整张表删除==
+
+# DQL
+
+Data Query Language(数据查询语言)，用来查询库中表的记录。在一个正常的业务系统中，查询操作的频次是要远高于增删改的
+
+## 基本语法
+
+```sql
+SELECT
+	字段列表
+FROM
+	表名列表
+WHERE
+	条件列表
+GROUP BY
+    分组字段列表
+HAVING
+	分组后条件列表
+ORDER BY
+	排序字段列表
+LIMIT
+	分页参数
+```
+
+## 
