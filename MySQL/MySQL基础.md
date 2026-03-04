@@ -1,4 +1,4 @@
-# MySQL
+# MySQL基础
 
 # 数据模型
 
@@ -689,6 +689,8 @@ select * from emp , dept;
 
 ## 内连接
 
+查询两张表的交集部分
+
 （1）隐式内连接
 
 ```sql
@@ -707,5 +709,297 @@ SELECT 字段列表 FROM 表1 [ INNER ] JOIN 表2 ON 连接条件 ... ;
 
 ```sql
 select e.name, d.name from emp e join dept d on e.dept_id = d.id;
+```
+
+
+
+## 外连接
+
+分为 **左外连接**和**右外连接**
+
+查询的是某张表的全部内容以及与另一张表的相交部分
+
+（1）左外连接
+
+```sql
+SELECT 字段列表 FROM 表1 LEFT [ OUTER ] JOIN 表2 ON 条件 ... ;
+```
+
+```sql
+select e.*, d.name from emp e left join dept d on e.dept_id = d.id;
+```
+
+（2）右外连接
+
+```sql
+SELECT 字段列表 FROM 表1 RIGHT [ OUTER ] JOIN 表2 ON 条件 ... ;
+```
+
+```sql
+select d.*, e.* from emp e right join dept d on e.dept_id = d.id;
+```
+
+
+
+## 自连接
+
+
+
+## 子查询
+
+SQL语句中嵌套`SELECT`语句，称为==嵌套查询==，也称为==子查询==
+
+例：
+
+```sql
+SELECT * FROM t1 WHERE column1 = ( SELECT column1 FROM t2 );
+```
+
+子查询外部的语句可以是INSERT / UPDATE / DELETE / SELECT 的任何一个
+
+
+
+（1）标量子查询
+
+标量子查询结果返回的是单个的值（所以常见的操作符 `=` `<>` `>` `>=` `<` `<=`）
+
+**==查询“销售部”的所有员工信息==**
+
+- 先查询“销售部门”的D
+
+```sql
+select id from dept where name = '销售部';
+```
+
+- 根据 "销售部" 部门ID, 查询员工信息
+
+```sql
+select * from emp where dept_id = (select id from dept where name = '销售部');
+```
+
+
+
+（2）列子查询
+
+列子查询结果返回的结果是一列数据（常见的操作符`IN`,`NOT IN`,`ANY`,`SOME`,`ALL`）
+
+**==查询 "销售部" 和 "市场部" 的所有员工信息==**
+
+- 查询“销售部”和“市场部”的ID合集
+
+```sql
+select id from dept where name = '销售部' or name = '市场部';
+```
+
+- 根据ID合集查询所有员工信息
+
+```sql
+select * from emp where dept_id in (select id from dept where name = '销售部' or name = '市场部');
+```
+
+**==查询比 财务部 所有人工资都高的员工信息==**
+
+- 查询财务部所有人的工资
+
+```sql
+select salary from emp where dept_id = (select id from dept where name = '财务部');
+```
+
+- 比 财务部 所有人工资都高的员工信息
+
+```sql
+select * from emp where salary > all(select salary from emp where dept_id = (select id from dept where name = '财务部'));
+```
+
+
+
+（3）行子查询
+
+行子查询返回的结果是一行（常用操作符`=`,`!=`,`IN`,`NOT IN`）
+
+**==查询与 "张无忌" 的薪资及直属领导相同的员工信息==**
+
+- 查询"张无忌"的薪资和直属领导
+
+```sql
+select salary , managerid from emp where name = '张无忌';
+```
+
+- 查询与 "张无忌" 的薪资及直属领导相同的员工信息 
+
+```sql
+select * from emp where (salary,managerid) = (select salary , managerid from emp where name = '张无忌';);
+```
+
+
+
+（4）表子查询
+
+表子查询的结果是多行多列，是一个子表（常用操作符 `IN`）
+
+**==查询与 "鹿杖客" , "宋远桥" 的职位和薪资相同的员工信息==**
+
+- 查询 "鹿杖客" , "宋远桥" 的职位和薪资
+
+```sql
+select job, salary from emp where name = '鹿杖客' or name = '宋远桥';
+```
+
+- 查询与 "鹿杖客" , "宋远桥" 的职位和薪资相同的员工信息
+
+```sql
+select * from emp where (job,salary) in ( select job, salary from emp where name = '鹿杖客' or name = '宋远桥' );
+```
+
+
+
+# 事物
+
+## 事物简介
+
+**事务**是一组操作的集合，它是一个**不可分割**的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败
+
+例：
+
+**转账**是一个事物，张三给李四转1000块钱，包含了3个操作：
+
+（1）查询张三账户余额
+
+（2）张三账户余额-1000
+
+（3）李四账户余额+1000
+
+业务逻辑执行之前开启事务，执行完毕后提交事务
+
+## 事务操作
+
+（1）查看/设置事务提交方式
+
+```sql
+SELECT @@autocommit ;
+SET @@autocommit = 0 ;
+```
+
+```
+mysql> SELECT @@autocommit ;
++--------------+
+| @@autocommit |
++--------------+
+|            1 |
++--------------+
+```
+
+返回`1`:开启了自动提交，执行的每一条 SQL 语句都会被数据库视为一个**独立的事务**，并且在执行成功后**立即永久生效**，无法通过执行 `ROLLBACK` 来撤销这个操作
+
+返回`0`:关闭了自动提交，执行 SQL 语句（数据在内存中变了，但还没板上钉钉）。如果你觉得没问题，执行 **`COMMIT;`**（正式提交，永久生效）。如果你发现写错了，执行 **`ROLLBACK;`**
+
+（2）开启事务
+
+```sql
+START TRANSACTION / BEGIN;
+```
+
+（3）提交事务
+
+```sql
+COMMIT;
+```
+
+（4）回滚事务
+
+```sql
+ROLLBACK
+```
+
+（5）完整流程
+
+```sql
+-- 开启事务
+start transaction
+-- 1. 查询张三余额
+select * from account where name = '张三';
+-- 2. 张三的余额减少1000
+update account set money = money - 1000 where name = '张三';
+-- 3. 李四的余额增加1000
+update account set money = money + 1000 where name = '李四';
+-- 如果正常执行完毕, 则提交事务
+commit;
+-- 如果执行过程中报错, 则回滚事务
+-- rollback;
+```
+
+
+
+## 四大特性
+
+开头字母拼起来就是**ACID**
+
+- 原子性（Atomicity）：事物是不可分割的最小操作单元，要么全部成功，要么全部失败
+- 一致性（Consistency）：事务完成时，必须使所有的数据都保持一致状态。保持**主键约束**，**外键约束**，**字段约束**，同时符合业务逻辑，与现实相符合
+- 隔离性（Isolation）：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行。（多人同时转账，数据不互相干扰）
+- 持久性（Durability）：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。（公司断电，服务器中的数据不变）
+
+
+
+## 并发事务
+
+（1）脏读：一个事务读到另外一个事务还没有提交（`COMMIT`）的数据。
+
+<img src="./image/image-20260201192455178.png" alt="image-20260201192455178" style="zoom:67%;" />
+
+step1. 事物A首先`select` id=1 的数据，然后`update`这条数据，但并没有`COMMIT`（这意味着数据随时可以改变）
+
+step2. 事物B此时`select` id=1 的数据，就读取到了A还未提交的数据
+
+
+
+（2）不可重复读：一个事务先后读取同一条记录，但两次读取的数据不同，称之为不可重复读。
+
+<img src="./image/image-20260201194246716.png" alt="image-20260201194246716" style="zoom:67%;" />
+
+step1. 事物A`select` id=1 的数据
+
+step2. 事物B`update` id=1 的数据
+
+step3. 事物A`select` id=1 的数据
+
+事物A两次读取同一条数据，但是读取的数据是不同的
+
+
+
+（3）幻读：一个事务按照条件查询数据时，没有对应的数据行，但是在插入数据时，又发现这行数据已经存在，好像出现了 "幻影"。
+
+<img src="./image/image-20260201204448603.png" alt="image-20260201204448603" style="zoom:67%;" />
+
+step1. 事物A`select` id=1 的数据，发现没有符合的数据
+
+step2. 事物B`insert` id=1 的数据
+
+step3. 事物A`insert`id=1 的数据，系统发现重复，报错
+
+step4. 事物A`select` id=1 的数据
+
+
+
+## **事务隔离级别**
+
+| **隔离级别**                              | **脏读** | **不可重复读** | **幻读** |
+| ----------------------------------------- | -------- | -------------- | -------- |
+| **Read uncommitted** (读未提交)           | √        | √              | √        |
+| **Read committed** (读已提交)             | ×        | √              | √        |
+| **Repeatable Read** (可重复读，MySQL默认) | ×        | ×              | √        |
+| **Serializable** (串行化)                 | ×        | ×              | ×        |
+
+（1）查看事务隔离级别
+
+```sql
+SELECT @@TRANSACTION_ISOLATION;
+```
+
+（2）设置事务隔离级别
+
+```sql
+SET [ SESSION | GLOBAL ] TRANSACTION ISOLATION LEVEL { READ UNCOMMITTED |
+READ COMMITTED | REPEATABLE READ | SERIALIZABLE }
 ```
 
